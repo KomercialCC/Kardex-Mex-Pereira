@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Mexicano — Informe de Gestión · Pereira</title>
+  <title>Mexicano · Pereira — Informe de Gestión · Kardex</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800;900&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
@@ -82,7 +82,7 @@
     }
     .brand-name{
       font-family:'Playfair Display',serif;
-      font-size:3.8rem;font-weight:900;
+      font-size:2.8rem;font-weight:900;
       color:#ffffff;
       line-height:1;letter-spacing:-1px;
     }
@@ -241,7 +241,7 @@
     .n-info{background:var(--amber-pale);color:var(--amber);border-color:#f0d896;}
 
     /* ════════════════════════════════
-       GALERÍA DE IMÁGENES
+       GALERÍA DE IMÁGENES / VIDEOS
     ════════════════════════════════ */
     .gallery-wrap{margin-top:64px;}
 
@@ -305,20 +305,17 @@
       position:absolute;inset:0;
       background:linear-gradient(180deg,transparent 35%,rgba(10,20,52,0.75) 100%);
     }
-    .vf .pr{
-      position:absolute;inset:0;
-      display:flex;align-items:center;justify-content:center;
-    }
-    .pc-big{
-      width:60px;height:60px;border-radius:50%;
+    .vf .zoom-icon{
+      position:absolute;top:14px;right:14px;
+      width:34px;height:34px;border-radius:50%;
       background:rgba(255,255,255,0.18);
-      border:2px solid rgba(255,255,255,0.5);
+      border:1.5px solid rgba(255,255,255,0.4);
       backdrop-filter:blur(6px);
       display:flex;align-items:center;justify-content:center;
-      transition:background .2s;
+      font-size:14px;color:#fff;
+      opacity:0;transition:opacity .2s;
     }
-    .vf:hover .pc-big{background:rgba(255,255,255,0.3);}
-    .pc-big svg{width:22px;height:22px;fill:#fff;margin-left:4px;}
+    .vf:hover .zoom-icon{opacity:1;}
     .vi{
       position:absolute;bottom:0;left:0;right:0;
       padding:18px 22px;
@@ -330,6 +327,33 @@
       font-size:0.58rem;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;
       background:rgba(200,146,42,0.3);border:1px solid rgba(200,146,42,0.5);
       color:var(--gold-lt);padding:2px 9px;border-radius:3px;
+    }
+
+    /* ─── Video badge overlay ─── */
+    .video-badge{
+      position:absolute;top:14px;left:14px;
+      display:inline-flex;align-items:center;gap:5px;
+      background:rgba(200,146,42,0.85);
+      border:1px solid rgba(200,146,42,0.9);
+      color:#fff;
+      font-size:0.58rem;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;
+      padding:3px 10px;border-radius:3px;
+      backdrop-filter:blur(4px);
+    }
+    .play-icon{
+      position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+      width:56px;height:56px;border-radius:50%;
+      background:rgba(255,255,255,0.22);
+      border:2px solid rgba(255,255,255,0.5);
+      backdrop-filter:blur(6px);
+      display:flex;align-items:center;justify-content:center;
+      font-size:20px;color:#fff;
+      transition:background .2s,transform .2s;
+      pointer-events:none;
+    }
+    .vf:hover .play-icon,.vg:hover .play-icon{
+      background:rgba(255,255,255,0.35);
+      transform:translate(-50%,-50%) scale(1.08);
     }
 
     /* ─── Grid ─── */
@@ -358,15 +382,12 @@
       position:absolute;inset:0;
       background:linear-gradient(180deg,transparent 50%,rgba(10,20,52,0.55) 100%);
     }
-    .pc-sm{
+    .vg-zoom{
       position:absolute;bottom:8px;right:8px;
-      width:30px;height:30px;border-radius:50%;
-      background:rgba(255,255,255,0.2);
-      border:1.5px solid rgba(255,255,255,0.5);
-      backdrop-filter:blur(4px);
-      display:flex;align-items:center;justify-content:center;
+      font-size:13px;color:rgba(255,255,255,0.8);
+      opacity:0;transition:opacity .18s;
     }
-    .pc-sm svg{width:12px;height:12px;fill:#fff;margin-left:2px;}
+    .vg:hover .vg-zoom{opacity:1;}
     .vg-body{padding:12px 14px 14px;}
     .vg-num{font-size:0.56rem;font-weight:700;letter-spacing:1.8px;text-transform:uppercase;color:var(--muted);margin-bottom:2px;}
     .vg-title{font-size:0.82rem;font-weight:600;color:var(--ink);line-height:1.3;}
@@ -377,7 +398,7 @@
       color:var(--gold);padding:2px 8px;border-radius:3px;
     }
 
-    /* ─── LIGHTBOX ─── */
+    /* ─── VIDEO MODAL ─── */
     .modal{
       position:fixed;inset:0;
       background:rgba(8,15,35,0.92);
@@ -408,14 +429,19 @@
       cursor:pointer;transition:background .15s;flex-shrink:0;
     }
     .modal-close:hover{background:rgba(255,255,255,0.16);color:#fff;}
-    .modal-img-wrap{
-      position:relative;max-height:68vh;overflow:hidden;
+    .modal-media-wrap{
+      position:relative;
       background:#070f22;
       display:flex;align-items:center;justify-content:center;
+      min-height:200px;
     }
-    .modal-img-wrap img{
+    .modal-media-wrap img{
       max-width:100%;max-height:68vh;
       object-fit:contain;display:block;
+    }
+    .modal-media-wrap iframe{
+      width:100%;height:68vh;
+      border:none;display:block;
     }
     .modal-nav{
       display:flex;align-items:center;justify-content:space-between;
@@ -474,10 +500,10 @@
     <div>
       <div class="brand-eyebrow">
         <span class="brand-eyebrow-line"></span>
-        Informe de Gestión · Kardex
+        Informe de Gestión · Mexicano · Pereira
       </div>
       <div class="brand-name">Mexicano</div>
-      <div class="brand-sub">Kardex de insumos, implementos y registro fotográfico de actividad — Pereira</div>
+      <div class="brand-sub">Kardex de insumos, implementos y registro fotográfico de actividad · Pereira</div>
     </div>
     <div class="masthead-right">
       <div class="status-pill"><span class="status-dot-gold"></span>Inventario Cerrado</div>
@@ -492,27 +518,27 @@
 
 <div class="wrap">
 
-  <!-- KPI — Inventario Final -->
+  <!-- KPI — Inventario Final de Productos -->
   <div class="kpi-row">
     <div class="kpi">
-      <div class="kpi-n">37</div>
-      <div class="kpi-l">Hamburguesa</div>
+      <div class="kpi-n">188</div>
+      <div class="kpi-l">Tostadas Azules</div>
       <div class="kpi-s">Stock Final · Enviado</div>
     </div>
     <div class="kpi">
-      <div class="kpi-n">133</div>
-      <div class="kpi-l">Sashimi</div>
+      <div class="kpi-n">211</div>
+      <div class="kpi-l">Salsas</div>
       <div class="kpi-s">Stock Final · Enviado</div>
     </div>
     <div class="kpi">
-      <div class="kpi-n">66</div>
-      <div class="kpi-l">Cubitos</div>
+      <div class="kpi-n">84</div>
+      <div class="kpi-l">Frijoles</div>
       <div class="kpi-s">Stock Final · Enviado</div>
     </div>
     <div class="kpi">
-      <div class="kpi-n">63</div>
-      <div class="kpi-l">Filete</div>
-      <div class="kpi-s">Stock Final · Enviado</div>
+      <div class="kpi-n">359</div>
+      <div class="kpi-l">Inicial: Salsa Jalapeño + Habanero + Chipotle</div>
+      <div class="kpi-s">359 und. salsas recibidas · 3 tipos</div>
     </div>
   </div>
 
@@ -530,42 +556,56 @@
           <th>Inventario Inicial</th>
           <th>Stock Final Enviado</th>
           <th>Diferencia</th>
+          <th>Cajas Enviadas</th>
         </tr>
       </thead>
       <tbody>
         <tr>
-          <td class="p">Hamburguesa</td>
-          <td class="nb">90</td>
-          <td class="ng">37</td>
-          <td class="nr">-53</td>
+          <td class="p">Tostadas Azules</td>
+          <td class="nb">288 und.</td>
+          <td class="ng">188 und.</td>
+          <td class="nr">−100</td>
+          <td class="nb">14 cajas</td>
         </tr>
         <tr>
-          <td class="p">Sashimi</td>
-          <td class="nb">150</td>
-          <td class="ng">133</td>
-          <td class="nr">-17</td>
+          <td class="p">Salsa Jalapeño</td>
+          <td class="nb">120 und.</td>
+          <td class="ng" rowspan="3" style="vertical-align:middle;">211 und. (total salsas)</td>
+          <td class="nr" rowspan="3" style="vertical-align:middle;">−148</td>
+          <td class="nb">6 cajas</td>
         </tr>
         <tr>
-          <td class="p">Cubitos</td>
-          <td class="nb">120</td>
-          <td class="ng">66</td>
-          <td class="nr">-54</td>
+          <td class="p">Salsa Habanero</td>
+          <td class="nb">120 und.</td>
+          <td class="nb">—</td>
         </tr>
         <tr>
-          <td class="p">Filete</td>
-          <td class="nb">72</td>
-          <td class="ng">63</td>
-          <td class="nr">-9</td>
+          <td class="p">Salsa Chipotle</td>
+          <td class="nb">119 und.</td>
+          <td class="nb">—</td>
+        </tr>
+        <tr>
+          <td class="p">Frijol Bayo</td>
+          <td class="nb">120 und.</td>
+          <td class="ng" rowspan="2" style="vertical-align:middle;">84 und. (total frijoles)</td>
+          <td class="nr" rowspan="2" style="vertical-align:middle;">−156</td>
+          <td class="nb">4 cajas</td>
+        </tr>
+        <tr>
+          <td class="p">Frijol Negro</td>
+          <td class="nb">120 und.</td>
+          <td class="nb">—</td>
         </tr>
       </tbody>
     </table>
+    <div class="notice n-info"><span class="notice-icon">ℹ</span><span><strong>Nota:</strong> El inventario final de salsas (211 und.) y frijoles (84 und.) agrupa todas las variedades. Las cajas enviadas corresponden al consolidado por categoría.</span></div>
   </div>
 
   <!-- ═══════════════════════════════════════════
        02 — Inventario Inicial de Implementos
   ═══════════════════════════════════════════ -->
   <div class="sec">
-    <span class="sec-num">02</span><h2>Inventario Inicial de Implementos — Pereira</h2><div class="sec-line"></div>
+    <span class="sec-num">02</span><h2>Inventario Inicial de Implementos — Mexicano Pereira</h2><div class="sec-line"></div>
   </div>
   <div class="tc">
     <table>
@@ -577,34 +617,36 @@
         </tr>
       </thead>
       <tbody>
-        <tr><td class="p">Mesa de stand</td>                                  <td class="nb">1</td><td><span class="st st-ok"><span class="st-d"></span>OK</span></td></tr>
-        <tr><td class="p">Nevera</td>                                          <td class="nb">1</td><td><span class="st st-ok"><span class="st-d"></span>OK</span></td></tr>
-        <tr><td class="p">Plancha eléctrica para preparaciones</td>            <td class="nb">1</td><td><span class="st st-ok"><span class="st-d"></span>OK</span></td></tr>
-        <tr><td class="p">Extensión eléctrica naranja</td>                    <td class="nb">1</td><td><span class="st st-ok"><span class="st-d"></span>OK</span></td></tr>
-        <tr><td class="p">Extensión eléctrica de la plancha</td>              <td class="nb">1</td><td><span class="st st-ok"><span class="st-d"></span>OK</span></td></tr>
-        <tr><td class="p">Regleta</td>                                         <td class="nb">1</td><td><span class="st st-ok"><span class="st-d"></span>OK</span></td></tr>
-        <tr><td class="p">Pinzas</td>                                          <td class="nb">1</td><td><span class="st st-ok"><span class="st-d"></span>OK</span></td></tr>
-        <tr><td class="p">Espátulas</td>                                       <td class="nb">2</td><td><span class="st st-ok"><span class="st-d"></span>OK</span></td></tr>
-        <tr><td class="p">Recipientes de acero inoxidable para preparaciones</td><td class="nb">2</td><td><span class="st st-ok"><span class="st-d"></span>OK</span></td></tr>
-        <tr><td class="p">Recipiente plástico para preparaciones</td>          <td class="nb">1</td><td><span class="st st-ok"><span class="st-d"></span>OK</span></td></tr>
-        <tr><td class="p">Bandeja de degustación café</td>                     <td class="nb">2</td><td><span class="st st-ok"><span class="st-d"></span>OK</span></td></tr>
-        <tr><td class="p">Servilletas</td>                                     <td class="nb">2</td><td><span class="st st-ok"><span class="st-d"></span>OK</span></td></tr>
-        <tr><td class="p">Capacillos para la degustación</td>                  <td class="nb">2</td><td><span class="st st-ok"><span class="st-d"></span>OK</span></td></tr>
-        <tr><td class="p">Bolsas de guantes</td>                               <td class="nb">2</td><td><span class="st st-ok"><span class="st-d"></span>OK</span></td></tr>
-        <tr><td class="p">Bolsa de cofias</td>                                 <td class="nb">1</td><td><span class="st st-ok"><span class="st-d"></span>OK</span></td></tr>
-        <tr><td class="p">Caja de tapabocas</td>                               <td class="nb">2</td><td><span class="st st-ok"><span class="st-d"></span>OK</span></td></tr>
-        <tr><td class="p">Caja plástica para guardar insumos</td>              <td class="nb">1</td><td><span class="st st-ok"><span class="st-d"></span>OK</span></td></tr>
-        <tr><td class="p">Toallas húmedas de limpieza</td>                    <td class="nb">1</td><td><span class="st st-ok"><span class="st-d"></span>OK</span></td></tr>
-        <tr><td class="p">Secadores de papel</td>                              <td class="nb">1</td><td><span class="st st-ok"><span class="st-d"></span>OK</span></td></tr>
-        <tr><td class="p">Letrero alérgénico</td>                              <td class="nb">1</td><td><span class="st st-ok"><span class="st-d"></span>OK</span></td></tr>
-        <tr><td class="p">Letrero no degustación para niños</td>               <td class="nb">1</td><td><span class="st st-ok"><span class="st-d"></span>OK</span></td></tr>
-        <tr><td class="p">Letrero de ausentarse por 15 minutos</td>            <td class="nb">1</td><td><span class="st st-ok"><span class="st-d"></span>OK</span></td></tr>
-        <tr><td class="p">Acrílico superficie caliente</td>                   <td class="nb">1</td><td><span class="st st-ok"><span class="st-d"></span>OK</span></td></tr>
-        <tr><td class="p">Bolsas de basura</td>                                <td class="nb">2</td><td><span class="st st-ok"><span class="st-d"></span>OK</span></td></tr>
-        <tr><td class="p">Desengrasante</td>                                   <td class="nb">1</td><td><span class="st st-ok"><span class="st-d"></span>OK</span></td></tr>
-        <tr><td class="p">Caneca para la basura</td>                           <td class="nb">1</td><td><span class="st st-ok"><span class="st-d"></span>OK</span></td></tr>
+        <tr><td class="p">Mesa de stand mexicano</td>                                 <td class="nb">1</td><td><span class="st st-ok"><span class="st-d"></span>OK</span></td></tr>
+        <tr><td class="p">Estante de madera para exhibición de productos</td>          <td class="nb">1</td><td><span class="st st-ok"><span class="st-d"></span>OK</span></td></tr>
+        <tr><td class="p">Caneca para la basura</td>                                   <td class="nb">1</td><td><span class="st st-ok"><span class="st-d"></span>OK</span></td></tr>
+        <tr><td class="p">Letrero alérgénico</td>                                      <td class="nb">1</td><td><span class="st st-ok"><span class="st-d"></span>OK</span></td></tr>
+        <tr><td class="p">Letrero de no degustación para menores de edad</td>          <td class="nb">1</td><td><span class="st st-ok"><span class="st-d"></span>OK</span></td></tr>
+        <tr><td class="p">Letrero de ausentarse por 15 minutos</td>                   <td class="nb">1</td><td><span class="st st-ok"><span class="st-d"></span>OK</span></td></tr>
+        <tr><td class="p">Bandeja de degustación café</td>                             <td class="nb">2</td><td><span class="st st-ok"><span class="st-d"></span>OK</span></td></tr>
+        <tr><td class="p">Caja plástica para guardar insumos</td>                      <td class="nb">2</td><td><span class="st st-ok"><span class="st-d"></span>OK</span></td></tr>
+        <tr><td class="p">Recipientes plásticos</td>                                   <td class="nb">1</td><td><span class="st st-ok"><span class="st-d"></span>OK</span></td></tr>
+        <tr><td class="p">Bolsas de basura</td>                                        <td class="nb">1</td><td><span class="st st-ok"><span class="st-d"></span>OK</span></td></tr>
+        <tr><td class="p">Toallitas húmedas de limpieza</td>                          <td class="nb">1</td><td><span class="st st-ok"><span class="st-d"></span>OK</span></td></tr>
+        <tr><td class="p">Secadores de papel</td>                                      <td class="nb">1</td><td><span class="st st-ok"><span class="st-d"></span>OK</span></td></tr>
+        <tr><td class="p">Servilletas</td>                                             <td class="nb">2</td><td><span class="st st-ok"><span class="st-d"></span>OK</span></td></tr>
+        <tr><td class="p">Paquete de tenedores</td>                                    <td class="nb">2</td><td><span class="st st-ok"><span class="st-d"></span>OK</span></td></tr>
+        <tr><td class="p">Paquete de capacillos para la degustación</td>               <td class="nb">2</td><td><span class="st st-ok"><span class="st-d"></span>OK</span></td></tr>
+        <tr><td class="p">Espátulas plásticas</td>                                     <td class="nb">2</td><td><span class="st st-ok"><span class="st-d"></span>OK</span></td></tr>
+        <tr><td class="p">Caja de tapabocas</td>                                       <td class="nb">1</td><td><span class="st st-ok"><span class="st-d"></span>OK</span></td></tr>
+        <tr><td class="p">Bolsa con cofias</td>                                        <td class="nb">2</td><td><span class="st st-ok"><span class="st-d"></span>OK</span></td></tr>
+        <tr><td class="p">Bolsas de guantes plásticos</td>                             <td class="nb">2</td><td><span class="st st-ok"><span class="st-d"></span>OK</span></td></tr>
+        <tr><td class="p">Gorras mexicano</td>                                         <td class="nb">2</td><td><span class="st st-ok"><span class="st-d"></span>OK</span></td></tr>
+        <tr><td class="p">Delantales</td>                                              <td class="nb">1</td><td><span class="st st-ok"><span class="st-d"></span>OK</span></td></tr>
+        <tr><td class="p">Desengrasante</td>                                           <td class="nb">1</td><td><span class="st st-ok"><span class="st-d"></span>OK</span></td></tr>
+        <tr><td class="p">Sticker de degustación</td>                                  <td class="nb">1</td><td><span class="st st-ok"><span class="st-d"></span>OK</span></td></tr>
+        <tr><td class="p">Sticker con código de barras</td>                            <td class="nb">1</td><td><span class="st st-ok"><span class="st-d"></span>OK</span></td></tr>
+        <tr><td class="p">Sticker para bolsas de ventas (paquete de 3 kids)</td>       <td class="nb">1</td><td><span class="st st-ok"><span class="st-d"></span>OK</span></td></tr>
+        <tr><td class="p">Vinipel</td>                                                 <td class="nb">1</td><td><span class="st st-ok"><span class="st-d"></span>OK</span></td></tr>
+        <tr><td class="p">Bolsas para empacar producto de ventas</td>                  <td class="nb">1 paquete</td><td><span class="st st-ok"><span class="st-d"></span>OK</span></td></tr>
       </tbody>
     </table>
+    <div class="notice n-info"><span class="notice-icon">ℹ</span><span><strong>Nota:</strong> La caja plástica registra 2 unidades; una de ellas llegó de más (doña Ana). Se incluye en el inventario inicial como llegó.</span></div>
   </div>
 
   <!-- ═══════════════════════════════════════════
@@ -623,47 +665,49 @@
         </tr>
       </thead>
       <tbody>
-        <tr><td class="p">Mesa de stand</td>                                    <td class="nb">1</td>  <td><span class="st st-ok"><span class="st-d"></span>OK</span></td></tr>
-        <tr><td class="p">Nevera</td>                                            <td class="nb">1</td>  <td><span class="st st-ok"><span class="st-d"></span>OK</span></td></tr>
-        <tr><td class="p">Plancha eléctrica para preparaciones</td>              <td class="nb">1</td>  <td><span class="st st-ok"><span class="st-d"></span>OK</span></td></tr>
-        <tr><td class="p">Extensión eléctrica naranja</td>                      <td class="nb">1</td>  <td><span class="st st-ok"><span class="st-d"></span>OK</span></td></tr>
-        <tr><td class="p">Extensión eléctrica de la plancha</td>                <td class="nb">1</td>  <td><span class="st st-ok"><span class="st-d"></span>OK</span></td></tr>
-        <tr><td class="p">Regleta</td>                                           <td class="nb">1</td>  <td><span class="st st-ok"><span class="st-d"></span>OK</span></td></tr>
-        <tr><td class="p">Pinzas</td>                                            <td class="nb">1</td>  <td><span class="st st-ok"><span class="st-d"></span>OK</span></td></tr>
-        <tr><td class="p">Espátulas</td>                                         <td class="nb">2</td>  <td><span class="st st-ok"><span class="st-d"></span>OK</span></td></tr>
-        <tr><td class="p">Recipiente de acero inoxidable para preparaciones</td><td class="nb">2</td>  <td><span class="st st-ok"><span class="st-d"></span>OK</span></td></tr>
-        <tr><td class="p">Recipiente plástico para preparaciones</td>            <td class="nb">1</td>  <td><span class="st st-ok"><span class="st-d"></span>OK</span></td></tr>
-        <tr><td class="p">Bandeja de degustación café</td>                       <td class="nb">2</td>  <td><span class="st st-ok"><span class="st-d"></span>OK</span></td></tr>
-        <tr><td class="p">Bolsas de guantes</td>                                 <td class="nb">0</td>  <td><span class="st st-w"><span class="st-d"></span>Sin stock</span></td></tr>
-        <tr><td class="p">Bolsa de cofias</td>                                   <td class="nb">1</td>  <td><span class="st st-ok"><span class="st-d"></span>OK</span></td></tr>
-        <tr><td class="p">Caja de tapabocas</td>                                 <td>—</td>             <td><span class="st st-a"><span class="st-d"></span>Sin dato</span></td></tr>
-        <tr><td class="p">Caja plástica para guardar insumos</td>                <td class="nb">1</td>  <td><span class="st st-ok"><span class="st-d"></span>OK</span></td></tr>
-        <tr><td class="p">Toallas húmedas de limpieza</td>                      <td class="nb">0</td>  <td><span class="st st-w"><span class="st-d"></span>Sin stock</span></td></tr>
-        <tr><td class="p">Secadores de papel</td>                                <td class="nb">0</td>  <td><span class="st st-w"><span class="st-d"></span>Sin stock</span></td></tr>
-        <tr><td class="p">Letrero alérgénico</td>                                <td class="nb">1</td>  <td><span class="st st-ok"><span class="st-d"></span>OK</span></td></tr>
-        <tr><td class="p">Letrero no degustación para niños</td>                 <td class="nb">1</td>  <td><span class="st st-ok"><span class="st-d"></span>OK</span></td></tr>
-        <tr><td class="p">Letrero de ausentarse por 15 minutos</td>              <td class="nb">1</td>  <td><span class="st st-ok"><span class="st-d"></span>OK</span></td></tr>
-        <tr><td class="p">Acrílico superficie caliente</td>                     <td class="nb">1</td>  <td><span class="st st-ok"><span class="st-d"></span>OK</span></td></tr>
-        <tr><td class="p">Bolsa de basura</td>                                   <td class="nb">1</td>  <td><span class="st st-ok"><span class="st-d"></span>OK</span></td></tr>
-        <tr><td class="p">Desengrasante</td>                                     <td class="nb">0</td>  <td><span class="st st-w"><span class="st-d"></span>Sin stock</span></td></tr>
-        <tr><td class="p">Caneca para la basura</td>                             <td class="nb">1</td>  <td><span class="st st-ok"><span class="st-d"></span>OK</span></td></tr>
-        <tr><td class="p">Stand para la marca</td>                               <td class="nb">1</td>  <td><span class="st st-ok"><span class="st-d"></span>OK</span></td></tr>
+        <tr><td class="p">Mesa de stand mexicano</td>                                 <td class="nb">1</td><td><span class="st st-ok"><span class="st-d"></span>OK</span></td></tr>
+        <tr><td class="p">Estante de madera para exhibición de productos</td>          <td class="nb">1</td><td><span class="st st-ok"><span class="st-d"></span>OK</span></td></tr>
+        <tr><td class="p">Caneca para la basura</td>                                   <td class="nb">1</td><td><span class="st st-ok"><span class="st-d"></span>OK</span></td></tr>
+        <tr><td class="p">Letrero alérgénico</td>                                      <td class="nb">1</td><td><span class="st st-ok"><span class="st-d"></span>OK</span></td></tr>
+        <tr><td class="p">Letrero de no degustación para menores de edad</td>          <td class="nb">1</td><td><span class="st st-ok"><span class="st-d"></span>OK</span></td></tr>
+        <tr><td class="p">Letrero de ausentarse por 15 minutos</td>                   <td class="nb">1</td><td><span class="st st-ok"><span class="st-d"></span>OK</span></td></tr>
+        <tr><td class="p">Bandeja de degustación café</td>                             <td class="nb">1</td><td><span class="st st-ok"><span class="st-d"></span>OK</span></td></tr>
+        <tr><td class="p">Caja plástica para guardar insumos</td>                      <td class="nb">2</td><td><span class="st st-ok"><span class="st-d"></span>OK</span></td></tr>
+        <tr><td class="p">Recipientes plásticos</td>                                   <td class="nb">2</td><td><span class="st st-ok"><span class="st-d"></span>OK</span></td></tr>
+        <tr><td class="p">Bolsas de basura</td>                                        <td class="nb">1</td><td><span class="st st-ok"><span class="st-d"></span>OK</span></td></tr>
+        <tr><td class="p">Toallitas húmedas de limpieza</td>                          <td class="nb">0</td><td><span class="st st-w"><span class="st-d"></span>Sin stock</span></td></tr>
+        <tr><td class="p">Secadores de papel</td>                                      <td class="nb">0</td><td><span class="st st-w"><span class="st-d"></span>Sin stock</span></td></tr>
+        <tr><td class="p">Servilletas</td>                                             <td class="nb">0</td><td><span class="st st-w"><span class="st-d"></span>Sin stock</span></td></tr>
+        <tr><td class="p">Paquete de tenedores</td>                                    <td class="nb">0</td><td><span class="st st-w"><span class="st-d"></span>Sin stock</span></td></tr>
+        <tr><td class="p">Paquete de capacillos para la degustación</td>               <td class="nb">2</td><td><span class="st st-ok"><span class="st-d"></span>OK</span></td></tr>
+        <tr><td class="p">Espátulas plásticas</td>                                     <td class="nb">2</td><td><span class="st st-ok"><span class="st-d"></span>OK</span></td></tr>
+        <tr><td class="p">Caja de tapabocas</td>                                       <td class="nb">2</td><td><span class="st st-ok"><span class="st-d"></span>OK</span></td></tr>
+        <tr><td class="p">Bolsa con cofias</td>                                        <td class="nb">1</td><td><span class="st st-ok"><span class="st-d"></span>OK</span></td></tr>
+        <tr><td class="p">Bolsas de guantes plásticos</td>                             <td class="nb">0</td><td><span class="st st-w"><span class="st-d"></span>Sin stock</span></td></tr>
+        <tr><td class="p">Gorras mexicano</td>                                         <td class="nb">2</td><td><span class="st st-ok"><span class="st-d"></span>OK</span></td></tr>
+        <tr><td class="p">Delantales</td>                                              <td class="nb">2</td><td><span class="st st-ok"><span class="st-d"></span>OK</span></td></tr>
+        <tr><td class="p">Desengrasante</td>                                           <td class="nb">0</td><td><span class="st st-w"><span class="st-d"></span>Sin stock</span></td></tr>
+        <tr><td class="p">Sticker de degustación</td>                                  <td class="nb">1</td><td><span class="st st-ok"><span class="st-d"></span>OK</span></td></tr>
+        <tr><td class="p">Sticker con código de barras</td>                            <td class="nb">1</td><td><span class="st st-ok"><span class="st-d"></span>OK</span></td></tr>
+        <tr><td class="p">Sticker para bolsas de ventas (paquete de 3 kids)</td>       <td class="nb">1</td><td><span class="st st-ok"><span class="st-d"></span>OK</span></td></tr>
+        <tr><td class="p">Vinipel</td>                                                 <td class="nb">1</td><td><span class="st st-ok"><span class="st-d"></span>OK</span></td></tr>
+        <tr><td class="p">Bolsas para empacar producto de ventas</td>                  <td class="nb">1 paquete</td><td><span class="st st-ok"><span class="st-d"></span>OK</span></td></tr>
       </tbody>
     </table>
-    <div class="notice n-warn"><span class="notice-icon">⚠</span><span><strong>Nota:</strong> Bolsas de guantes, toallas húmedas, secadores de papel y desengrasante reportan sin stock en el inventario final enviado. Verificar y reponer para próxima jornada.</span></div>
+    <div class="notice n-warn"><span class="notice-icon">⚠</span><span><strong>Nota:</strong> Toallitas húmedas, secadores de papel, servilletas, tenedores, bolsas de guantes y desengrasante reportan sin stock en el inventario final enviado. Verificar y reponer para la próxima jornada.</span></div>
   </div>
 
-  <!-- ══ GALERÍA DE IMÁGENES ══ -->
+  <!-- ══ GALERÍA DE IMÁGENES Y VIDEOS ══ -->
   <div class="gallery-wrap">
     <div class="gallery-header">
       <div>
-        <div class="gallery-eyebrow"><span class="gallery-eyebrow-bar"></span>Evidencia Fotográfica</div>
-        <div class="gallery-heading">Registro en Imágenes<br>de la Gestión</div>
-        <p class="gallery-desc">Documentación completa de la actividad en Pereira. Haz clic en cualquier imagen para ampliarla; usa las flechas del teclado para navegar.</p>
+        <div class="gallery-eyebrow"><span class="gallery-eyebrow-bar"></span>Evidencia Fotográfica y Video</div>
+        <div class="gallery-heading">Registro en Imágenes<br>y Videos de la Gestión</div>
+        <p class="gallery-desc">Documentación completa de la actividad en Mexicano — Pereira. Haz clic en cualquier elemento para abrirlo; usa las flechas del teclado para navegar.</p>
       </div>
       <div class="gallery-badge">
-        <div class="gallery-badge-n">13</div>
-        <small class="gallery-badge-l">Imágenes registradas</small>
+        <div class="gallery-badge-n">6</div>
+        <small class="gallery-badge-l">Evidencias registradas</small>
       </div>
     </div>
 
@@ -683,9 +727,7 @@
       </div>
       <button class="modal-close" onclick="closeModal()">✕</button>
     </div>
-    <div class="modal-img-wrap">
-      <img id="mImg" src="" alt="">
-    </div>
+    <div class="modal-media-wrap" id="mMediaWrap"></div>
     <div class="modal-nav">
       <button class="mnav-btn" id="btnPrev" onclick="navigate(-1)">← Anterior</button>
       <span  class="modal-counter" id="mCnt"></span>
@@ -697,105 +739,130 @@
 <!-- ══ FOOTER ══ -->
 <footer class="footer">
   <div class="footer-in">
-    <div class="footer-brand">Mexicano</div>
-    <div class="footer-meta">Informe de Gestión · Kardex Pereira</div>
+    <div class="footer-brand">Mexicano · Pereira</div>
+    <div class="footer-meta">Informe de Gestión · Kardex Mexicano Pereira</div>
   </div>
 </footer>
 
 <script>
-/* ── IMÁGENES ── */
-const IMGS = [
-  {id:'1P15xUkbjak7xzhXbmUoYK0yFgRc_nOPc', num:'Evidencia 01', title:'Registro de apertura',    tag:'Gestión'},
-  {id:'1HMv-FyLIbXDxmk9iqmkN9ka4vsuWa4E7', num:'Evidencia 02', title:'Registro de apertura',    tag:'Gestión'},
-  {id:'1X2QcX7P2e-EOh1xR8iHnZfn88U367hE4', num:'Evidencia 03', title:'Degustación en stand',    tag:'Degustación'},
-  {id:'1oh-w_CMphfz2fxonPFnPxx_zKq31lspg', num:'Evidencia 04', title:'Degustación en stand',    tag:'Degustación'},
-  {id:'142lzns9wvOWyZs2AknLUHjTcOJpzbtFd', num:'Evidencia 05', title:'Punto de venta',          tag:'Pereira'},
-  {id:'1gQsj4KRrf9xF8rjGE80tOpAX1C8gaKo-', num:'Evidencia 06', title:'Punto de venta',          tag:'Pereira'},
-  {id:'1MqEPt4sgX0KmgYlOLsWjcvUSLya1K-L2', num:'Evidencia 07', title:'Conteo de inventario',   tag:'Inventario'},
-  {id:'1AqF5hLwUDqJTUHENtGPjH81dXvCWHlmZ', num:'Evidencia 08', title:'Conteo de inventario',   tag:'Inventario'},
-  {id:'1MAJK_qqVfT6xhlLW3rI_ZWpnWAFAI4ZJ', num:'Evidencia 09', title:'Revisión implementos',   tag:'Implementos'},
-  {id:'1QooY7WBlypN1wMZMFo9PirakPJa7RyPs', num:'Evidencia 10', title:'Revisión implementos',   tag:'Implementos'},
-  {id:'1sX9gmf2hQdF_bQbKJh5oN-xgZ7hxRF4z', num:'Evidencia 11', title:'Registro de actividad',  tag:'Gestión'},
-  {id:'1ppSBofLkVR1miY08diZPGIALunX8o-Iy', num:'Evidencia 12', title:'Registro de actividad',  tag:'Gestión'},
-  {id:'1t9QHwidJrjqsygka7b5HdoGUvcR2ro3L', num:'Evidencia 13', title:'Cierre de jornada',      tag:'Cierre'},
+/* ── MEDIOS ── 
+   type: 'img' = imagen de Drive (thumbnail)
+   type: 'video' = video de Drive (embed en iframe)
+*/
+const MEDIA = [
+  {id:'1tJjeBCHoTWoiuKBDgZxGGIrQQtrKwU_K', type:'video', num:'01'},
+  {id:'1MFCXmjHVaLCCzApA68YLs0NeZOVZrRzE', type:'img',   num:'02'},
+  {id:'1dC4sx4TQkeDnTZYPt2vJ-fRudV0jdPz0', type:'img',   num:'03'},
+  {id:'1nCKaVtcIbdopgHn4yzvyMjo7-lNFt_5F', type:'video', num:'04'},
+  {id:'1BJwT4wocJMvNRofgqczCCGmiAbOSq4GS', type:'video', num:'05'},
+  {id:'1lEtnAcj42kL5pSI8cm9RjyLGGIIIcEIU', type:'img',   num:'06'},
 ];
 
-const thumb = id => `https://drive.google.com/thumbnail?id=${id}&sz=w800`;
+const thumb     = id => `https://drive.google.com/thumbnail?id=${id}&sz=w800`;
+const thumbFull = id => `https://drive.google.com/thumbnail?id=${id}&sz=w1600`;
+const videoEmb  = id => `https://drive.google.com/file/d/${id}/preview`;
+const videoThumb = id => `https://drive.google.com/thumbnail?id=${id}&sz=w800`;
 
-/* ── Featured (top 2) ── */
-const gF = document.getElementById('gFeatured');
-IMGS.slice(0,2).forEach((v,i)=>{
-  gF.innerHTML+=`
+/* ── Construir tarjeta Featured ── */
+function featuredCard(v, i) {
+  const isVid = v.type === 'video';
+  const mediaInner = isVid
+    ? `<div style="position:absolute;inset:0;background:linear-gradient(135deg,#0a1428 0%,#162d5e 100%);display:flex;align-items:center;justify-content:center;">
+         <div class="play-icon" style="opacity:1;position:relative;top:auto;left:auto;transform:none;width:64px;height:64px;font-size:24px;">▶</div>
+       </div>
+       <div class="video-badge">▶ Video</div>`
+    : `<img class="ti" src="${thumb(v.id)}" alt="${v.num}" loading="lazy">
+       <div class="ov"></div>
+       <div class="zoom-icon">🔍</div>`;
+  return `
   <div class="vf" onclick="openModal(${i})">
     <div class="tw">
-      <img class="ti" src="${thumb(v.id)}" alt="${v.num}" onerror="this.style.opacity=0">
-      <div class="ov"></div>
-      <div class="pr"><div class="pc-big"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/></svg></div></div>
+      ${mediaInner}
     </div>
     <div class="vi">
       <div class="vi-num">${v.num}</div>
-      <div class="vi-title">${v.title}</div>
-      <span class="vi-tag">${v.tag}</span>
     </div>
   </div>`;
-});
+}
 
-/* ── Grid (remaining 11) ── */
-const gG = document.getElementById('gGrid');
-IMGS.slice(2).forEach((v,i)=>{
-  const idx=i+2;
-  gG.innerHTML+=`
-  <div class="vg" onclick="openModal(${idx})">
+/* ── Construir tarjeta Grid ── */
+function gridCard(v, i) {
+  const isVid = v.type === 'video';
+  const mediaInner = isVid
+    ? `<div style="position:absolute;inset:0;background:linear-gradient(135deg,#0a1428 0%,#162d5e 100%);display:flex;align-items:center;justify-content:center;">
+         <div class="play-icon" style="opacity:1;position:relative;top:auto;left:auto;transform:none;width:44px;height:44px;font-size:17px;">▶</div>
+       </div>
+       <div class="video-badge" style="font-size:0.5rem;padding:2px 7px;">▶ Video</div>`
+    : `<img class="ti" src="${thumb(v.id)}" alt="${v.num}" loading="lazy">
+       <div class="ov"></div>
+       <div class="vg-zoom">🔍</div>`;
+  return `
+  <div class="vg" onclick="openModal(${i})">
     <div class="tw">
-      <img class="ti" src="${thumb(v.id)}" alt="${v.num}" onerror="this.style.opacity=0">
-      <div class="ov"></div>
-      <div class="pc-sm"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/></svg></div>
+      ${mediaInner}
     </div>
     <div class="vg-body">
       <div class="vg-num">${v.num}</div>
-      <div class="vg-title">${v.title}</div>
-      <span class="vg-tag">${v.tag}</span>
     </div>
   </div>`;
-});
+}
+
+/* ── Render Featured (top 2) ── */
+const gF = document.getElementById('gFeatured');
+MEDIA.slice(0, 2).forEach((v, i) => { gF.innerHTML += featuredCard(v, i); });
+
+/* ── Render Grid (resto) ── */
+const gG = document.getElementById('gGrid');
+MEDIA.slice(2).forEach((v, i) => { gG.innerHTML += gridCard(v, i + 2); });
 
 /* ── Lightbox ── */
-let cur=0;
-function openModal(idx){
-  cur=idx;
+let cur = 0;
+
+function openModal(idx) {
+  cur = idx;
   refreshModal();
   document.getElementById('modal').classList.add('on');
-  document.body.style.overflow='hidden';
+  document.body.style.overflow = 'hidden';
 }
-function refreshModal(){
-  const v=IMGS[cur];
-  document.getElementById('mLbl').textContent=v.num;
-  document.getElementById('mTtl').textContent=v.title+' · '+v.tag;
-  document.getElementById('mImg').src=thumb(v.id);
-  document.getElementById('mImg').alt=v.num;
-  document.getElementById('mCnt').textContent=`${cur+1} / ${IMGS.length}`;
-  document.getElementById('btnPrev').disabled=cur===0;
-  document.getElementById('btnNext').disabled=cur===IMGS.length-1;
+
+function refreshModal() {
+  const v = MEDIA[cur];
+  document.getElementById('mLbl').textContent = v.num;
+  document.getElementById('mTtl').textContent = '';
+  document.getElementById('mCnt').textContent = `${cur + 1} / ${MEDIA.length}`;
+  document.getElementById('btnPrev').disabled = cur === 0;
+  document.getElementById('btnNext').disabled = cur === MEDIA.length - 1;
+
+  const wrap = document.getElementById('mMediaWrap');
+  if (v.type === 'video') {
+    wrap.innerHTML = `<iframe src="${videoEmb(v.id)}" allowfullscreen allow="autoplay"></iframe>`;
+  } else {
+    wrap.innerHTML = `<img src="${thumbFull(v.id)}" alt="${v.num}">`;
+  }
 }
-function navigate(d){
-  const n=cur+d;
-  if(n<0||n>=IMGS.length)return;
-  cur=n;
+
+function navigate(d) {
+  const n = cur + d;
+  if (n < 0 || n >= MEDIA.length) return;
+  cur = n;
   refreshModal();
 }
-function closeModal(){
+
+function closeModal() {
   document.getElementById('modal').classList.remove('on');
-  document.getElementById('mImg').src='';
-  document.body.style.overflow='';
+  document.getElementById('mMediaWrap').innerHTML = '';
+  document.body.style.overflow = '';
 }
-function overlayClick(e){
-  if(e.target===document.getElementById('modal'))closeModal();
+
+function overlayClick(e) {
+  if (e.target === document.getElementById('modal')) closeModal();
 }
-document.addEventListener('keydown',e=>{
-  if(!document.getElementById('modal').classList.contains('on'))return;
-  if(e.key==='Escape')closeModal();
-  if(e.key==='ArrowLeft')navigate(-1);
-  if(e.key==='ArrowRight')navigate(1);
+
+document.addEventListener('keydown', e => {
+  if (!document.getElementById('modal').classList.contains('on')) return;
+  if (e.key === 'Escape') closeModal();
+  if (e.key === 'ArrowLeft') navigate(-1);
+  if (e.key === 'ArrowRight') navigate(1);
 });
 </script>
 </body>
